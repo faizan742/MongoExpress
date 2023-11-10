@@ -25,33 +25,15 @@ router
 .get(async (req,res)=>{
     var id = req.query.id;
     console.log(id);
-    const client = new MongoClient(uri);
-    await client.connect();  
-    const db = client.db(databaseName);
-    console.log(`Connected to MongoDB: ${databaseName}`);
-    const collection = db.collection("Students");
-    const result1 = await collection.find({ _id: new ObjectId(id)}).toArray();
-    
-    client.close();
-    res.json(result1);
+    test=await db1.FindById(id);
+    res.json(test);
 });
 
 router
 .route('/findbylimit')
 .get(async (req, res)=>{  
     var limit = req.query.limit;
-    if(limit=='0'){
-        limit=10;
-    }
-    limit=parseInt(limit);
-    
-    const client = new MongoClient(uri);
-    await client.connect();  
-    const db = client.db(databaseName);
-    console.log(`Connected to MongoDB: ${databaseName}`);
-    const collection = db.collection("Students");
-    const result1 = await collection.find().limit(limit).toArray();
-    client.close();
+    result1= await db1.GetLimit(limit);
     res.json(result1); 
     
 });  
@@ -68,17 +50,23 @@ router
       res.render('form');
       
   }).post(async (req,res)=>{
-    
-    const client = new MongoClient(uri);
-    await client.connect();  
-    const db = client.db(databaseName);
-    
-    const collection = db.collection("Students");
-    const result1 = await collection.insertOne({ Name:req.body.username,age:req.body.userage,Edu:req.body.userEdu});
-    
-    client.close();
 
-    res.send(200);
+    if((req.body.username !== undefined && req.body.username !== null && req.body.username !== "") && 
+    (req.body.userage !== undefined && req.body.userage !== null && req.body.userage !== "") &&
+    (req.body.userEdu !== undefined && req.body.userEdu !== null && req.body.userEdu !== "") ) {
+   
+        result1=await db1.AddUser(req.body.username,req.body.userage,req.body.userEdu);
+        if(result1.acknowledged){
+        res.send(200);
+        }else{
+        res.send(403);
+        }
+    } else {
+        res.send(403);
+    }
+
+    
+    
   });
 
 
