@@ -20,5 +20,5 @@ app.get('/', (req, res) => {
 
 app.set('view engine', 'ejs');
 app.set('views', './view');
-  
+console.log('hi');  
   
