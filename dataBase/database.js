@@ -1,8 +1,5 @@
-
 const express=require('express');
-
 let router=express.Router();
-
 const mongoose = require('mongoose');
 const { MongoClient } = require('mongodb');
 const { ObjectId } = require('mongodb');
@@ -43,11 +40,9 @@ async function GetLimit(limit) {
 
 async function AddUser(name,age,edu){
     collection=await Connection();
-    const result1 = await collection.insertOne({ Name:name,age:age,Edu:edu});
-    
+    const result1 = await collection.insertOne({ Name:name,age:age,Edu:edu});    
     client.close();
     return result1;
-
 }
 
 

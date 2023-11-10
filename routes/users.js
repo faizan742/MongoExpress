@@ -3,11 +3,6 @@ let router=express.Router();
 var cookieParser = require('cookie-parser');  
 
 router.use(cookieParser());   
-const { MongoClient } = require('mongodb');
-const { ObjectId } = require('mongodb');
-const mongoose = require('mongoose');
-const uri = 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2/'; 
-const databaseName = 'school'; 
 const db1=require('../dataBase/database.js')
 
 router.use(express.urlencoded({ extended: true }));
@@ -24,9 +19,13 @@ router
 .route('/findbyId')
 .get(async (req,res)=>{
     var id = req.query.id;
-    console.log(id);
-    test=await db1.FindById(id);
-    res.json(test);
+    if(id !== undefined && id !== null && id !== ""){
+        test=await db1.FindById(id);
+        res.json(test);
+    }else{
+        res.send(403)
+    }
+    
 });
 
 router
@@ -77,11 +76,3 @@ module.exports=router;
 
 
 
-// router.set('view engine', 'ejs');
-// router.set('views', './views');
-
-// router
-// .route('/adduser')
-// .get((req,res)=>{
-//     res.render('form');
-// });
